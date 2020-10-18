@@ -12,7 +12,7 @@ export async function generateToken() {
 			.post(root + '/api/validation/login', {
 				publicKey: '7Kb443PWqFBP5iO84pnSYA==',
 			})
-			.json();
+			.then((r) => r.json());
 		console.log(r);
 		cookie.set('token', r.token, { path: '/' });
 	} catch (err) {
