@@ -132,6 +132,7 @@ class Page extends Component {
 		});
 		this.setState({
 			loading: false,
+			newAccount: false,
 		});
 		this.showAccountDetails(r.value);
 	}

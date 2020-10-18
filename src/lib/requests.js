@@ -43,7 +43,8 @@ export async function requestFile(formData) {
 		const r = (
 			await axios.post(root + '/api/file/uploadFile', formData, {
 				headers: {
-					'Content-type': 'multipart/form-data',
+                    'Content-type': 'multipart/form-data',
+                    authorization: cookie.get('token'),
 				},
 			})
 		).data;
