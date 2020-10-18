@@ -26,17 +26,6 @@ class Appbar extends Component {
 							</Typography>
 						</Link>
 						<div className={classes.spacer}></div>
-						<ThemeProvider theme={toolbarTheme}>
-							<Link to='/docs' style={{ textDecoration: 'none' }}>
-								<Button
-									color='primary'
-									variant='text'
-									disableElevation
-								>
-									Documentacion del api
-								</Button>
-							</Link>
-						</ThemeProvider>
 					</Toolbar>
 				</AppBar>
 			</ThemeProvider>
