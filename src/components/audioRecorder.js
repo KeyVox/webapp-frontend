@@ -87,7 +87,7 @@ class AudioRecorder extends Component {
 					setTimeout(() => {
 						this.setState({ audio, recording: false });
 						if (this.props.onChange) {
-							this.props.onChange(audio);
+							this.props.onChange(blob);
 						}
 					}, 5000);
 				});
