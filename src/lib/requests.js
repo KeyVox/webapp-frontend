@@ -5,8 +5,8 @@ const root = 'http://localhost:6969';
 export async function generateToken() {
 	try {
 		const r = await axios
-			.post(root + '/api/auth', {
-				key: '',
+			.post(root + '/api/validation/login', {
+				publicKey: '',
 			})
 			.json();
 		localStorage.setItem('token', r.token);
@@ -35,7 +35,7 @@ export async function requestPost(url, body) {
 export async function requestFile(formData) {
 	try {
 		const r = await axios
-			.post(root + '/api/upload', formData, {
+			.post(root + '/api/file/uploadFile', formData, {
 				headers: {
 					'Content-type': 'multipart/form-data',
 				},

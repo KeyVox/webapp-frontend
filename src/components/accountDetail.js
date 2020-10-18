@@ -3,14 +3,17 @@ import {
 	Card,
 	CardActions,
 	CardContent,
+	createMuiTheme,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
 	Grid,
+	ThemeProvider,
 	Typography,
 	withStyles,
 } from '@material-ui/core';
+import { blue, green, red } from '@material-ui/core/colors';
 import React, { Component } from 'react';
 
 const styles = (theme) => ({
@@ -23,6 +26,30 @@ const styles = (theme) => ({
 	},
 	titleKey: {
 		marginBottom: theme.spacing(2),
+	},
+});
+
+const themeStatusPendant = createMuiTheme({
+	palette: {
+		primary: {
+			main: blue[500],
+		},
+	},
+});
+
+const themeStatusSuccess = createMuiTheme({
+	palette: {
+		primary: {
+			main: green[700],
+		},
+	},
+});
+
+const themeStatusError = createMuiTheme({
+	palette: {
+		primary: {
+			main: red[400],
+		},
 	},
 });
 
@@ -62,11 +89,46 @@ class AccountDetail extends Component {
 									Patrones de huella digital
 								</Typography>
 							</Grid>
+							{voiceKeys.length === 0 && (
+								<Grid item xs={12}>
+									<Typography
+										varaitn='h6'
+										color='textSecondary'
+									>
+										Esta cuenta no tiene huellas de voz
+										registradas
+									</Typography>
+								</Grid>
+							)}
 							{voiceKeys.map((key, i) => (
 								<Grid item xs={12} key={i}>
 									<Card elevation={0} variant='outlined'>
 										<CardContent>
-											<Typography>{key.name}</Typography>
+											<Typography variant='h6'>
+												{key.name}
+											</Typography>
+											<ThemeProvider
+												theme={
+													key.status === 0
+														? themeStatusPendant
+														: key.status === 1
+														? themeStatusError
+														: themeStatusSuccess
+												}
+											>
+												<Typography
+													variant='overline'
+													gutterBottom
+													color='primary'
+												>
+													Estado:{' '}
+													{key.status === 0
+														? 'pendiente'
+														: key.status === 1
+														? 'error'
+														: 'completado'}
+												</Typography>
+											</ThemeProvider>
 										</CardContent>
 										<CardActions>
 											<Grid

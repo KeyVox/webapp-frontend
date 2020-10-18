@@ -23,9 +23,12 @@ import AccountDetail from '../components/accountDetail';
 import DeleteAccountDialog from '../components/deleteAccountDialog';
 import DeleteKeyDialog from '../components/deleteKeyDialog';
 
-import { requestPost } from '../lib/requests';
+import { generateToken, requestFile, requestPost } from '../lib/requests';
 
 class Page extends Component {
+	voiceKeysInterval = -1;
+	accountsInterval = -1;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,33 +36,104 @@ class Page extends Component {
 			newVoiceKey: false,
 			deleteKeyConfirm: false,
 			deleteAccountConfirm: false,
-			accountDetail: true,
+			accountDetail: false,
 			loading: false,
 			account: {
 				name: 'Alan',
 				phone: '+525537000967',
+				_id: '',
+				idAccount: '',
 			},
 			voiceKey: {
 				name: 'Voice key',
 				id: '1',
+				status: 0,
 			},
-			voiceKeys: [{ name: 'Prueba', id: '1' }],
+			voiceKeys: [{ name: 'Prueba', _id: '1' }],
 			accounts: [],
 		};
 	}
 
 	componentDidMount() {
-		requestPost('/api/validation/login', {
-			publicKey: 'hola',
-		})
-			.then((r) => console.log(r))
-			.catch(console.log);
+		generateToken()
+		this.accountsInterval = setInterval(() => {
+			requestPost('/api/account/listAccountsByClient', {})
+				.then((r) => {
+					this.setState({ accounts: r.value });
+				})
+				.catch(console.log);
+		}, 1000);
 	}
 
 	handleAccountChange(key, e) {
 		const account = this.state.account;
 		account[key] = e.target.value;
 		this.setState({ account });
+	}
+
+	async showAccountDetails(account) {
+		this.setState({ account: account });
+
+		this.voiceKeysInterval = setInterval(() => {
+			requestPost('/api/activationWord/getActivationWordsByAccount', {
+				idAccount: account.idAccount,
+			})
+				.then((r) => {
+					this.setState({
+						voiceKeys: r.value,
+						accountDetail: true,
+					});
+				})
+				.catch(console.log);
+		}, 1000);
+
+		requestPost('/api/activationWord/getActivationWordsByAccount', {
+			idAccount: account.idAccount,
+		})
+			.then((r) => {
+				this.setState({
+					voiceKeys: r.value,
+					accountDetail: true,
+				});
+			})
+			.catch(console.log);
+	}
+
+	async createKey(data) {
+		this.setState({ loading: true });
+
+		const formData1 = new FormData();
+		const formData2 = new FormData();
+		const formData3 = new FormData();
+		formData1.append('file', data.sampleOne);
+		formData2.append('file', data.sampleTwo);
+		formData3.append('file', data.sampleThree);
+
+		const sample1 = (await requestFile(formData1))._id;
+		const sample2 = (await requestFile(formData2))._id;
+		const sample3 = (await requestFile(formData3))._id;
+
+		const r = await requestPost('/api/activationWord/addActivationWord', {
+			idAccount: this.state.account.idAccount,
+			name: data.name,
+			samples: [sample1, sample2, sample3],
+		});
+
+		this.setState({ loading: false, newVoiceKey: false });
+	}
+
+	async createAccount(data) {
+		this.setState({ loading: true });
+		const r = await requestPost('/api/account/addAccount', {
+			idPhoto: null,
+			accountNumber: data.id,
+			phoneNumber: data.phone,
+			name: data.name,
+		});
+		this.setState({
+			loading: false,
+		});
+		this.showAccountDetails(r.value);
 	}
 
 	render() {
@@ -76,12 +150,15 @@ class Page extends Component {
 				/>
 				<AccountForm
 					open={this.state.newAccount}
-					onSubmit={(e) => console.log(e)}
+					onSubmit={(e) => this.createAccount(e)}
 					onClose={(e) => this.setState({ newAccount: false })}
 				/>
 				<AccountDetail
 					open={this.state.accountDetail}
-					onClose={(e) => this.setState({ accountDetail: false })}
+					onClose={(e) => {
+						clearInterval(this.voiceKeysInterval);
+						this.setState({ accountDetail: false });
+					}}
 					account={this.state.account}
 					voiceKeys={this.state.voiceKeys}
 					onNewKey={(e) => this.setState({ newVoiceKey: true })}
@@ -98,7 +175,7 @@ class Page extends Component {
 				<HotwordForm
 					open={this.state.newVoiceKey}
 					onClose={(e) => this.setState({ newVoiceKey: false })}
-					onSubmit={(e) => console.log(e)}
+					onSubmit={(e) => this.createKey(e)}
 				/>
 				<Container className={classes.container}>
 					<Card>
@@ -145,15 +222,30 @@ class Page extends Component {
 									options={
 										<Grid container justify='center'>
 											<Tooltip title='Ver cliente'>
-												<IconButton size='small'>
+												<IconButton
+													size='small'
+													onClick={(e) =>
+														this.showAccountDetails(
+															elem
+														)
+													}
+												>
 													<InfoOutlined />
 												</IconButton>
 											</Tooltip>
-											<Tooltip title='Eliminar cliente'>
-												<IconButton size='small'>
+											{/* <Tooltip title='Eliminar cliente'>
+												<IconButton
+													size='small'
+													onClick={(e) =>
+														this.setState({
+															account: elem,
+															deleteAccountConfirm: true,
+														})
+													}
+												>
 													<Delete />
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
 										</Grid>
 									}
 								/>
