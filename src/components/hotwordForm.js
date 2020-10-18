@@ -115,7 +115,7 @@ class HotwordForm extends Component {
 							</Grid>
 							<Grid item xs={12}>
 								<Typography color='primary' variant='overline'>
-									Tercer muestra
+									Tercera muestra
 								</Typography>
 							</Grid>
 							<Grid

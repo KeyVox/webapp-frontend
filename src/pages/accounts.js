@@ -10,7 +10,12 @@ import {
 	withStyles,
 } from '@material-ui/core';
 
-import { InfoOutlined, Delete } from '@material-ui/icons';
+import {
+	InfoOutlined,
+	Delete,
+	CallRounded,
+	CallOutlined,
+} from '@material-ui/icons';
 
 import React, { Component, Fragment } from 'react';
 import HeaderCell from '../components/headerCell';
@@ -22,6 +27,7 @@ import LoadingDialog from '../components/loadingDialog';
 import AccountDetail from '../components/accountDetail';
 import DeleteAccountDialog from '../components/deleteAccountDialog';
 import DeleteKeyDialog from '../components/deleteKeyDialog';
+import WaitingDialog from '../components/waitingDialog';
 
 import { generateToken, requestFile, requestPost } from '../lib/requests';
 
@@ -51,6 +57,9 @@ class Page extends Component {
 			},
 			voiceKeys: [{ name: 'Prueba', _id: '1' }],
 			accounts: [],
+			waitVerification: false,
+			verificationResult: false,
+			call: null,
 		};
 	}
 
@@ -161,11 +170,21 @@ class Page extends Component {
 		this.showAccountDetails(r.value);
 	}
 
+	async makeCall(account) {
+		this.setState({ waitVerification: true });
+		const r = await requestPost('/api/call/requestCall', {
+			idAccount: account._id,
+		});
+		console.log(r.call);
+		this.setState({ call: r.call });
+	}
+
 	render() {
 		const { classes } = this.props;
 
 		return (
 			<Fragment>
+				<WaitingDialog open={this.state.waitVerification} />
 				<DeleteAccountDialog
 					open={this.state.deleteAccountConfirm}
 					onClose={(e) =>
@@ -256,6 +275,16 @@ class Page extends Component {
 													}
 												>
 													<InfoOutlined />
+												</IconButton>
+											</Tooltip>
+											<Tooltip title='Realizar llamada de verificacion'>
+												<IconButton
+													sisze='small'
+													onClick={(e) =>
+														this.makeCall(elem)
+													}
+												>
+													<CallOutlined />
 												</IconButton>
 											</Tooltip>
 											{/* <Tooltip title='Eliminar cliente'>
