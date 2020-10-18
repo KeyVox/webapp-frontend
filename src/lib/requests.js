@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+import { Cookies } from 'react-cookie';
+
+const cookie = new Cookies();
+
 const root = 'http://localhost:6969';
 
 export async function generateToken() {
@@ -9,7 +13,8 @@ export async function generateToken() {
 				publicKey: '7Kb443PWqFBP5iO84pnSYA==',
 			})
 			.json();
-		window.token = r.token
+		console.log(r);
+		cookie.set('token', r.token, { path: '/' });
 	} catch (err) {
 		console.log(err.response);
 	}
@@ -20,7 +25,7 @@ export async function requestPost(url, body) {
 		const r = await axios
 			.post(root + url, body, {
 				headers: {
-					authorization: window.token,
+					authorization: cookie.get('token'),
 				},
 			})
 			.json();
