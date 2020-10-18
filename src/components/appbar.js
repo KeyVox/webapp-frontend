@@ -33,7 +33,7 @@ class Appbar extends Component {
 									variant='text'
 									disableElevation
 								>
-									DOCS
+									Documentacion del api
 								</Button>
 							</Link>
 						</ThemeProvider>

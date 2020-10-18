@@ -19,7 +19,13 @@ export default class ClientRow extends Component {
 		const { classes, id, name, options } = this.props;
 
 		return (
-			<Grid container direction='row' spacing={1}>
+			<Grid
+				item
+				container
+				direction='row'
+				spacing={1}
+				className={classes.row}
+			>
 				<ClientCell xs={5} classes={classes}>
 					{id}
 				</ClientCell>

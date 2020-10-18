@@ -1,22 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Clients from './pages/clients';
+import Accounts from './pages/accounts';
 import Docs from './pages/docs';
 import AppBar from './components/appbar';
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
-import { deepOrange } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: deepOrange[500],
+			main: pink[500],
 		},
 	},
 });
 
 export default class App extends React.Component {
 	render() {
+
+		
+
 		return (
 			<Router>
 				<ThemeProvider theme={theme}>
@@ -28,7 +31,7 @@ export default class App extends React.Component {
 								<Docs />
 							</Route>
 							<Route path='/'>
-								<Clients />
+								<Accounts />
 							</Route>
 						</Switch>
 					</div>
