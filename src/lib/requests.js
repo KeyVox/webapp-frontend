@@ -29,8 +29,7 @@ export async function requestPost(url, body) {
 					authorization: cookie.get('token'),
 				},
 			})
-			.json();
-
+			.then((r) => r.json());
 		return r;
 	} catch (err) {
 		console.log(err.response);
@@ -46,7 +45,7 @@ export async function requestFile(formData) {
 					'Content-type': 'multipart/form-data',
 				},
 			})
-			.json();
+			.then((r) => r.json());
 		return r;
 	} catch (err) {
 		console.log(err.response);
