@@ -9,7 +9,7 @@ export async function generateToken() {
 				publicKey: '7Kb443PWqFBP5iO84pnSYA==',
 			})
 			.json();
-		localStorage.setItem('token', r.token);
+		window.token = r.token
 	} catch (err) {
 		console.log(err.response);
 	}
@@ -20,7 +20,7 @@ export async function requestPost(url, body) {
 		const r = await axios
 			.post(root + url, body, {
 				headers: {
-					authorization: localStorage.getItem('token'),
+					authorization: window.token,
 				},
 			})
 			.json();
