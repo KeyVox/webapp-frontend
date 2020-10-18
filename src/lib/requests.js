@@ -4,7 +4,7 @@ import { Cookies } from 'react-cookie';
 
 const cookie = new Cookies();
 
-const root = 'http://localhost:6969';
+const root = '';
 
 export async function generateToken() {
 	try {

@@ -177,7 +177,19 @@ class Page extends Component {
 			source: 'demo',
 		});
 		console.log(r.call);
-		this.setState({ call: r.call });
+		const interval = setInterval(() => {
+			requestPost(
+				'/api/identificationRequest/getStatusIdentificationRequest',
+				{ id: r.call.idIdentificationRequest }
+			)
+				.then((r) => {
+					if (r.status !== 0) {
+						clearInterval(interval);
+						this.setState({ waitVerification: false });
+					}
+				})
+				.catch(console.log(r));
+		}, 1000);
 	}
 
 	render() {

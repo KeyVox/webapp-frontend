@@ -10,7 +10,7 @@ import {
 	Typography,
 	withStyles,
 } from '@material-ui/core';
-import { pink } from '@material-ui/core/colors';
+import { green, pink } from '@material-ui/core/colors';
 import React, { Component } from 'react';
 
 const styles = (theme) => ({
@@ -19,7 +19,7 @@ const styles = (theme) => ({
 		padding: theme.spacing(2),
 	},
 	paper: {
-		background: pink[600],
+		background: green[600],
 	},
 });
 
@@ -39,20 +39,9 @@ class WaitingDialog extends Component {
 				<Dialog open={open} classes={{ paper: classes.paper }}>
 					<DialogTitle>
 						<Typography variant='h5' color='primary'>
-							Esperando verificacion
+							Cuenta verificada
 						</Typography>
 					</DialogTitle>
-					<DialogContent>
-						<Grid
-							container
-							direction='row'
-							justify='center'
-							className={classes.content}
-						>
-							<CircularProgress size={80} />
-						</Grid>
-					</DialogContent>
-					<DialogActions></DialogActions>
 				</Dialog>
 			</ThemeProvider>
 		);
