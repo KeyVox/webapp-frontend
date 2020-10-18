@@ -6,7 +6,7 @@ export async function generateToken() {
 	try {
 		const r = await axios
 			.post(root + '/api/validation/login', {
-				publicKey: '',
+				publicKey: '7Kb443PWqFBP5iO84pnSYA==',
 			})
 			.json();
 		localStorage.setItem('token', r.token);
