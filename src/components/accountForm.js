@@ -87,14 +87,6 @@ class AccountForm extends Component {
 					</DialogContent>
 					<DialogActions>
 						<Button
-							variant='text'
-							onClick={(e) =>
-								this.setState({ newAccount: false })
-							}
-						>
-							Cancelar
-						</Button>
-						<Button
 							variant='contained'
 							color='primary'
 							type='submit'
