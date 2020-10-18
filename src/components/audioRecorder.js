@@ -78,7 +78,9 @@ class AudioRecorder extends Component {
 				});
 
 				recorder.addEventListener('stop', () => {
-					const blob = new Blob(recordedChunks);
+					const blob = new Blob(recordedChunks, {
+						type: 'audio/mp3',
+					});
 					const url = URL.createObjectURL(blob);
 					const audio = new Audio(url);
 					audio.volume = 0;

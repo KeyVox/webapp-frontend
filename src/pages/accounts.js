@@ -106,8 +106,14 @@ class Page extends Component {
 		const formData2 = new FormData();
 		const formData3 = new FormData();
 		formData1.append('file', data.sampleOne);
+		formData1.append('name', data.name+'_sampl1')
+		formData1.append('desc', data.name+'_sampl1')
 		formData2.append('file', data.sampleTwo);
+		formData2.append('name', data.name+'_sampl2')
+		formData2.append('desc', data.name+'_sampl3')
 		formData3.append('file', data.sampleThree);
+		formData3.append('name', data.name+'_sampl3')
+		formData3.append('desc', data.name+'_sampl3')
 
 		const sample1 = (await requestFile(formData1))._id;
 		const sample2 = (await requestFile(formData2))._id;
