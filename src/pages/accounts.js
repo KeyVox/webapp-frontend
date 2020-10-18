@@ -76,7 +76,7 @@ class Page extends Component {
 
 		this.voiceKeysInterval = setInterval(() => {
 			requestPost('/api/activationWord/getActivationWordsByAccount', {
-				idAccount: account.idAccount,
+				idAccount: account._id,
 			})
 				.then((r) => {
 					this.setState({
@@ -88,7 +88,7 @@ class Page extends Component {
 		}, 1000);
 
 		requestPost('/api/activationWord/getActivationWordsByAccount', {
-			idAccount: account.idAccount,
+			idAccount: account._id,
 		})
 			.then((r) => {
 				this.setState({
@@ -106,14 +106,32 @@ class Page extends Component {
 		const formData2 = new FormData();
 		const formData3 = new FormData();
 		formData1.append('file', data.sampleOne);
-		formData1.append('name', data.name + '_sampl1');
-		formData1.append('desc', data.name + '_sampl1');
+		formData1.append(
+			'name',
+			data.name + '_sampl1_' + this.state.account._id
+		);
+		formData1.append(
+			'desc',
+			data.name + '_sampl1_' + this.state.account._id
+		);
 		formData2.append('file', data.sampleTwo);
-		formData2.append('name', data.name + '_sampl2');
-		formData2.append('desc', data.name + '_sampl3');
+		formData2.append(
+			'name',
+			data.name + '_sampl2_' + this.state.account._id
+		);
+		formData2.append(
+			'desc',
+			data.name + '_sampl2_' + this.state.account._id
+		);
 		formData3.append('file', data.sampleThree);
-		formData3.append('name', data.name + '_sampl3');
-		formData3.append('desc', data.name + '_sampl3');
+		formData3.append(
+			'name',
+			data.name + '_sampl3_' + this.state.account._id
+		);
+		formData3.append(
+			'desc',
+			data.name + '_sampl3_' + this.state.account._id
+		);
 
 		const sample1 = (await requestFile(formData1))._id;
 		const sample2 = (await requestFile(formData2))._id;
