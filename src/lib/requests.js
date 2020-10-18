@@ -16,6 +16,7 @@ export async function generateToken() {
 		console.log(r);
 		cookie.set('token', r.token, { path: '/' });
 	} catch (err) {
+		console.log(err);
 		console.log(err.response);
 	}
 }
